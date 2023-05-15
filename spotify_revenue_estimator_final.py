@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
+from datetime import datetime
 from sklearn.model_selection import train_test_split
 
 path=r'C:\Users\Administrator\Desktop\RNspotifydataset.xlsx'
@@ -57,7 +58,7 @@ x_test=[]
 
 y_train = np.array(y_train)
 
-rf = RandomForestRegressor(n_estimators=100, random_state=0)
+rf = RandomForestRegressor(n_estimators=100, random_state=int(datetime.now().strftime("%S")))
 
 x_train=np.array(x_train)
 rf.fit(x_train, y_train)
@@ -92,12 +93,15 @@ for i in range(len(y_pred)):
     est+=y_pred[i]*x_test[i][1]
 print('--------------------------------------------\n')
 print('\nUnaccounted Entries: -')
-
+tm=0
 for x in notacc:
     try:
         print(doc['Customer Territory'][x],'\t',int(doc['Stream'][x]))
+        tm+=1
     except:
         pass
+if tm==0:
+    print("No entries\n")
 print('--------------------------------------------\nPredicted Estimate: ',est)
 print('Actual Cost ($) : ',REALCOST)
 ####
